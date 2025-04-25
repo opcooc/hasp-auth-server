@@ -10,6 +10,7 @@ public class SecurityConstants {
     public static final String OAUTH_CONSENT_PAGE_URI = "/oauth/consent";
 
     public static final String OAUTH_EXTERNAL_AUTHORIZE_URI = "/oauth/external/authorize";
+    public static final String OAUTH_EXTERNAL_REVOKE_URI = "/oauth/external/revoke";
     public static final String OAUTH_EXTERNAL_CALLBACK_URI = "/oauth/external/callback/{source}";
     public static final String OAUTH_EXTERNAL_REGISTER_URI = "/oauth/external/register";
     public static final String OAUTH_EXTERNAL_OUTCOME_PAGE_URI = "/oauth/external/outcome";

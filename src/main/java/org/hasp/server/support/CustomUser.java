@@ -194,7 +194,6 @@ public class CustomUser implements StandardClaimAccessor, UserDetails {
             return this.claim(StandardClaimNames.ZONEINFO, zoneinfo);
         }
 
-
         public CustomUser build() {
             return new CustomUser(this.claims);
         }

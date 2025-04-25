@@ -80,4 +80,13 @@ public class OauthExternalController {
         return "outcome";
     }
 
+    @Operation(summary = "撤销联合登录授权", description = "需要第三方系统同时删除关联信息")
+    @Parameters({
+            @Parameter(name = "source", description = "登录来源", in = ParameterIn.QUERY)
+    })
+    @DeleteMapping(SecurityConstants.OAUTH_EXTERNAL_REVOKE_URI)
+    public void revoke(HttpServletRequest request, HttpServletResponse response, @RequestParam String source) {
+        federatedService.revoke(request, response, source);
+    }
+
 }
