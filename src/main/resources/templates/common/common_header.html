@@ -1,0 +1,36 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- 页面头部 -->
+<header class="main-header" th:fragment="header">
+    <nav class="navbar navbar-expand-lg border-bottom">
+        <div class="container">
+            <a class="navbar-brand" href="#">统一认证中心</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="navbar-nav me-auto">
+                </div>
+
+                <ul th:if="${user != null}" class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <form class="d-flex" th:action="@{/logout}" method="post">
+                            <button class="btn" type="submit">注销</button>
+                        </form>
+                    </li>
+                </ul>
+
+                <ul  th:if="${user == null}" class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">登录</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">注册</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<!-- 页面头部 -->

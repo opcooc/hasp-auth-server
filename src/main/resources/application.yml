@@ -1,0 +1,76 @@
+server:
+  port: 9898
+  servlet:
+    session:
+      cookie:
+        name: AUTH_SERVER_SESSION_ID
+        http-only: true
+
+spring:
+  application:
+    name: hasp-auth-server
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML #LEGACYHTML5
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      timeout: 3000ms
+      connect-timeout: 5000
+      client-type: LETTUCE
+      lettuce:
+        pool:
+          max-wait: 800ms
+          max-active: 5
+          min-idle: 3
+          max-idle: 5
+  security:
+    oauth2:
+      authorizationserver:
+        multiple-issuers-allowed: false
+        issuer: http://127.0.0.1:9898
+        endpoint:
+          authorizationUri: /oauth/authorize
+          deviceAuthorizationUri: /oauth/device_authorization
+          deviceVerificationUri: /oauth/device_verification
+          tokenUri: /oauth/token
+          jwkSetUri: /oauth/jwks
+          tokenRevocationUri: /oauth/revoke
+          tokenIntrospectionUri: /oauth/introspect
+          oidc:
+            logoutUri: /connect/logout
+            clientRegistrationUri: /connect/register
+            userInfoUri: /userinfo
+
+springdoc:
+  show-login-endpoint: true
+  enable-spring-security: true
+  show-oauth2-endpoints: true
+  api-docs:
+    enabled: true
+  swagger-ui:
+    tagsSorter: alpha
+    use-root-path: true
+    display-request-duration: true
+    doc-expansion: none
+    show-Extensions: true
+    show-Common-Extensions: true
+    disable-swagger-default-url: false
+
+hasp:
+  data:
+    type: memory
+
+logging:
+  config: classpath:logback/logback-spring.xml
+  level:
+    root: info
+    org.springframework.web: TRACE
+    org.springframework.security: TRACE
+    org.springframework.security.oauth2: TRACE
+    io.lettuce.core: off
+    org.springframework.data.redis.core: off
+    org.springframework.session.data.redis: off

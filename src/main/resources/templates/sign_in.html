@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>登陆账户</title>
+    <th:block th:replace="/common/common_css::css"/>
+    <th:block th:replace="/common/common_js::js"/>
+    <style>
+        /* 错误提示样式 */
+        .alert-danger {
+            font-size: 14px;
+            position: fixed; /* 固定在页面上 */
+            top: 20px; /* 距离顶部 20px */
+            right: 20px; /* 距离右边 20px */
+            z-index: 1050; /* 确保提示在页面上方 */
+            max-width: 300px; /* 限制宽度 */
+            opacity: 0; /* 默认透明 */
+            animation: slideIn 0.5s forwards; /* 使用动画显示 */
+            padding-right: 40px; /* 给关闭按钮留空间 */
+        }
+
+        /* 提示框进入动画 */
+        @keyframes slideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-tabs {
+            border-bottom: none;
+            margin: 0 auto 20px;
+            font-weight: bold;
+            justify-content: center;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            color: var(--bs-gray);
+            font-size: 14px;
+            padding: 0 !important;
+            margin: 0 6px;
+        }
+
+        .nav-tabs .nav-link:hover {
+            color: var(--bs-gray);
+        }
+
+        .nav-tabs .nav-link.active {
+            border-bottom: 3px solid #2563EB !important;
+            font-size: 14px;
+            color: #2563EB;
+        }
+    </style>
+    <script>
+        function callbackPassword() {
+            document.login_password_form.submit();
+        }
+
+        function callbackContact() {
+            document.login_contact_form.submit();
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let countdown = 60; // 倒计时秒数
+            let timer; // 计时器
+            let btn = document.getElementById("sendCaptcha");
+
+            btn.addEventListener("click", async function () {
+                if (btn.disabled) return; // 防止重复点击
+
+                // 移除之前的错误提示
+                const errorDiv = document.getElementById("captchaError");
+                if (errorDiv) {
+                    errorDiv.remove();
+                }
+
+                // 调用接口发送验证码
+                try {
+                    let response = await fetch("/api/send-captcha", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ phone: document.getElementById("phone").value }) // 使用真实手机号
+                    });
+
+                    let result = await response.json();
+
+                    if (result.success) {
+                        startCountdown(btn); // 发送成功后开始倒计时
+                    } else {
+                        showError(result.message);
+                    }
+                } catch (error) {
+                    showError("请求失败，请检查网络连接！");
+                    console.error("API 请求错误:", error);
+                }
+            });
+
+            function startCountdown(btn) {
+                btn.disabled = true; // 禁用按钮
+                btn.classList.add("text-secondary"); // 变灰
+                btn.innerText = `${countdown} 秒后重试`;
+
+                timer = setInterval(function () {
+                    countdown--;
+                    btn.innerText = `${countdown} 秒后重试`;
+
+                    if (countdown <= 0) {
+                        clearInterval(timer);
+                        btn.disabled = false; // 启用按钮
+                        btn.classList.remove("text-secondary");
+                        btn.innerText = "发送验证码";
+                        countdown = 60; // 重置倒计时
+                    }
+                }, 1000);
+            }
+
+            function showError(message) {
+                const errorDiv = document.createElement("div");
+                errorDiv.id = "captchaError";
+                errorDiv.innerHTML =
+                [
+                    `<div class="alert alert-danger alert-dismissible" role="alert">`,
+                    `   <div>${message}</div>`,
+                    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                    '</div>'
+                ].join('');
+
+                // 将错误提示添加到页面上
+                document.body.appendChild(errorDiv);
+
+                // 自动消失（3秒后）
+                setTimeout(function () {
+                    errorDiv.style.opacity = "0";
+                    setTimeout(function () {
+                        errorDiv.remove();
+                    }, 500); // 等待动画结束后再移除
+                }, 3000);
+            }
+
+            window.closeError = function () {
+                const errorDiv = document.getElementById("captchaError");
+                if (errorDiv) {
+                    errorDiv.remove();
+                }
+            }
+        });
+    </script>
+</head>
+<body>
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="form-max-width">
+
+        <div class="d-flex justify-content-center align-items-center mb-4">
+            <img src="/assets/images/hasp-icon.svg" alt="logo" width="46">
+            <span class="fw-bold text-primary" style="font-size: 32px; line-height: 46px;">HASPSERVER</span>
+        </div>
+
+        <ul class="nav nav-tabs mb-3" id="tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact_tab"
+                        type="button" role="tab" aria-controls="contact" aria-selected="true">验证码登录
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="password-tab" data-bs-toggle="tab" data-bs-target="#password_tab"
+                        type="button" role="tab" aria-controls="password" aria-selected="false">密码登录
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="tabContent">
+            <div class="tab-pane show active" id="contact_tab" role="tabpanel" aria-labelledby="contact-tab">
+                <form name="login_contact_form" method="post" th:action="@{/oauth/login}">
+                    <input type="hidden" name="login_type" value="phone">
+
+                    <div class="mb-4">
+                        <input type="text" id="phone" name="username" placeholder="请输入手机号"
+                               class="form-control h-40px fs-14px" required>
+                    </div>
+
+                    <div class="position-relative mb-4">
+                        <input type="text" class="form-control h-40px fs-14px" id="captcha" name="captcha"
+                               placeholder="请输入验证码">
+                        <button type="button" id="sendCaptcha"
+                                class="btn btn-link position-absolute top-50 end-0 translate-middle-y px-2 py-1 cursor-pointer text-primary fs-14px"
+                                style="text-decoration: none;">
+                            发送验证码
+                        </button>
+                    </div>
+
+                    <div class="mb-4 form-check h-40px">
+                        <input class="form-check-input" type="checkbox" id="contact_agreement">
+                        <label class="form-check-label fs-12px"
+                               for="contact_agreement">我已阅读并同意用户协议与隐私政策，未注册的手机号将自动注册</label>
+                    </div>
+
+                    <button type="button" class="mb-3 h-40px fs-14px btn btn-primary w-100"
+                            onclick="callbackContact()">
+                        登 录
+                    </button>
+                </form>
+            </div>
+            <div class="tab-pane" id="password_tab" role="tabpanel" aria-labelledby="password-tab">
+                <form name="login_password_form" method="post" th:action="@{/oauth/login}">
+                    <input type="hidden" name="login_type" value="username">
+                    <div class="mb-4">
+                        <input type="text" id="username" name="username" placeholder="请输入手机号/邮箱地址"
+                               class="form-control h-40px fs-14px" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <input type="password" id="password" name="password" placeholder="请输入密码"
+                               class="form-control h-40px fs-14px" required>
+                    </div>
+
+                    <div class="mb-4 form-check h-30px">
+                        <input class="form-check-input" type="checkbox" id="password_agreement">
+                        <label class="form-check-label fs-12px"
+                               for="password_agreement">我已阅读并同意用户协议与隐私政策</label>
+                    </div>
+
+                    <button type="button" class="mb-4 h-40px fs-14px btn btn-primary w-100"
+                            onclick="callbackPassword()">
+                        登 录
+                    </button>
+
+                    <div class="d-flex justify-content-between mb-3 fs-14px">
+                        <a class="text-primary" style="text-decoration: none;" href='/oauth/sign_up'>忘记密码</a>
+                        <a class="text-primary" style="text-decoration: none;" href='/oauth/sign_up'>立即注册</a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col d-flex align-items-center fs-12px">
+                <hr class="flex-grow-1">
+                <span class="mx-2">其他方式</span>
+                <hr class="flex-grow-1">
+            </div>
+        </div>
+
+        <a class="mb-2 h-40px btn btn-light w-100" href='/oauth/external/authorize/wechat_open'>
+            <img src="/assets/images/wechat.png" height="25" alt="Sign in with WeChat"> Sign in with WeChat
+        </a>
+        <a class="mb-2 h-40px btn btn-light w-100" href='/oauth/external/authorize/github'>
+            <img src="/assets/images/github.png" height="25" alt="Sign in with GitHub"> Sign in with GitHub
+        </a>
+        <a class="mb-2 h-40px btn btn-light w-100" href='/oauth/external/authorize/google'>
+            <img src="/assets/images/google.png" height="25" alt="Sign in with Google"> Sign in with Google
+        </a>
+    </div>
+</div>
+</body>
+</html>

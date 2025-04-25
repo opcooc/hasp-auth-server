@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>社交登录</title>
+</head>
+<body>
+<div>
+    <span id="status" th:text="${error ? '登录失败:' + error_message : '登录成功'}" th:remove="tag"></span>
+    <span id="countdown"></span>
+</div>
+
+<script th:inline="javascript">
+    window.onload = function () {
+        // 倒计时时间（单位：秒）
+        let countdown = 3;
+        // 获取倒计时显示元素
+        const countdownElement = document.getElementById('countdown');
+        // 显示初始倒计时
+        countdownElement.textContent = `（${countdown} 秒后关闭）`;
+        // 每秒更新倒计时
+        const interval = setInterval(function () {
+            countdown--;
+            countdownElement.textContent = `（${countdown} 秒后关闭）`;
+            // 倒计时结束时清除定时器并关闭窗口
+            if (countdown <= 0) {
+                clearInterval(interval);
+                window.close();
+            }
+        }, 1000);
+    }
+</script>
+</body>
+</html>

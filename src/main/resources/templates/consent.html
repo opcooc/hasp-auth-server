@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>应用授权</title>
+    <th:block th:replace="/common/common_css::css"/>
+    <th:block th:replace="/common/common_js::js"/>
+    <script>
+        function submitConsent() {
+            document.consent_form.submit();
+        }
+        function cancelConsent() {
+            document.consent_form.reset();
+            this.submitConsent();
+        }
+    </script>
+</head>
+<body>
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="form-max-width m-auto">
+        <div class="row mb-4 h-50px">
+            <h1 class="text-primary text-center">应用授权</h1>
+        </div>
+        <div class="row mb-4">
+            <div class="col fs-14px">
+                <span class="fw-bold text-primary" th:text="${clientName}"></span>
+                请求获取以下权限:<br/>
+            </div>
+        </div>
+        <div th:if="${userCode}" class="row mb-4">
+            <div class="col text-center">
+                <div class="alert alert-warning fs-14px">
+                    您已提供代码
+                    <span class="fw-bold" th:text="${userCode}"></span>
+                    验证此代码是否与设备上显示的代码匹配
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col">
+                <form name="consent_form" method="post" th:action="${requestURI}">
+                    <input type="hidden" name="client_id" th:value="${clientId}">
+                    <input type="hidden" name="state" th:value="${state}">
+                    <input th:if="${userCode}" type="hidden" name="user_code" th:value="${userCode}">
+
+                    <div th:each="scope: ${scopes}" class="form-check mb-4 fs-14px">
+                        <input
+                                class="form-check-input"
+                                type="checkbox"
+                                name="scope"
+                                th:value="${scope.scope}"
+                                th:id="${scope.scope}"
+                                checked
+                        >
+                        <label class="form-check-label fw-bold px-2" th:for="${scope.scope}"
+                               th:text="${scope.description}"/>
+                    </div>
+
+                    <div>
+                        <button type="button" class="mb-4 w-100 h-40px btn btn-primary fs-14px" onclick="submitConsent()">
+                            同意授权
+                        </button>
+                        <button type="button" class="mb-4 w-100 h-40px btn btn-light fs-14px" onclick="cancelConsent()">
+                            取消授权
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <span class="fs-12px">
+                    提供访问权限需要征得您的同意，<br/>
+                    如果您不同意，请单击“取消授权”，在这种情况下，不会与应用程序共享任何信息。
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
