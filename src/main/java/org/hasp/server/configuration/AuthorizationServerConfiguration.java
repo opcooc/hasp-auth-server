@@ -11,6 +11,7 @@ import org.hasp.server.support.CustomOidcLogoutHandler;
 import org.hasp.server.support.CustomOidcUserInfoMapper;
 import org.hasp.server.utils.KeyUtils;
 import org.hasp.server.utils.SecurityConstants;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +35,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 
+import java.io.IOException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
@@ -105,12 +107,12 @@ public class AuthorizationServerConfiguration {
     }
 
     @Bean
-    public JWKSource<SecurityContext> jwkSource() {
+    public JWKSource<SecurityContext> jwkSource(@Value("${hasp.cert.dir}") String dir) {
         return (jwkSelector, securityContext) -> {
             try {
-                String kid = KeyUtils.loadCurrentKid("D:\\", "default_tenant");
-                PublicKey publicKey = KeyUtils.loadCurrentPublicKey("D:\\", "default_tenant");
-                PrivateKey privateKey = KeyUtils.loadCurrentPrivateKey("D:\\", "default_tenant");
+                String kid = KeyUtils.loadCurrentKid(dir, "");
+                PublicKey publicKey = KeyUtils.loadCurrentPublicKey(dir, "");
+                PrivateKey privateKey = KeyUtils.loadCurrentPrivateKey(dir, "");
                 RSAKey rsaKey = new RSAKey.Builder((RSAPublicKey) publicKey).privateKey((RSAPrivateKey) privateKey).keyID(kid).build();
                 return jwkSelector.select(new JWKSet(rsaKey));
             } catch (Exception e) {

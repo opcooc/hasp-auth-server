@@ -7,7 +7,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 
 @Configuration(proxyBeanMethods = false)
-@EnableRedisRepositories("org.apply.server.repository.redis")
+@EnableRedisRepositories("org.hasp.server.repository.redis")
 public class RedisConfiguration {
 
     @Bean

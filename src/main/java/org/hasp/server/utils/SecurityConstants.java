@@ -4,9 +4,6 @@ public class SecurityConstants {
     public static final String SECURITY_REQUIREMENT = "bearer_auth";
     public static final String AUTH_FEDERATED_USER = "HASP_AUTH_FEDERATED_USER";
 
-    public static final String CLIENT_SCOPE = "client.management";
-    public static final String USER_SCOPE = "user.management";
-
     public static final String OAUTH_LOGIN_URI = "/oauth/login";
     public static final String OAUTH_SIGN_IN_PAGE_URI = "/oauth/sign_in";
     public static final String OAUTH_SIGN_UP_PAGE_URI = "/oauth/sign_up";

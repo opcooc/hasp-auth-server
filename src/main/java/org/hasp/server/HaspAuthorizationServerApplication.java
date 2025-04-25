@@ -6,12 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.io.IOException;
 
 @SpringBootApplication
-public class AuthorizationServerApplication {
+public class HaspAuthorizationServerApplication {
 
     public static void main(String[] args) throws IOException {
-        // todo 测试使用
-//        KeyUtils.generateAndSaveKeyPair("D:\\", "default_tenant");
-        SpringApplication.run(AuthorizationServerApplication.class, args);
+        SpringApplication.run(HaspAuthorizationServerApplication.class, args);
     }
 
 }

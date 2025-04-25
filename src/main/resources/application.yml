@@ -63,6 +63,10 @@ springdoc:
 hasp:
   data:
     type: memory
+  cert:
+    dir: /certs
+
+
 
 logging:
   config: classpath:logback/logback-spring.xml
