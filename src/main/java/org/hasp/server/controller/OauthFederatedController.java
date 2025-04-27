@@ -13,7 +13,6 @@ import me.zhyd.oauth.model.AuthUser;
 import org.hasp.server.service.FederatedService;
 import org.hasp.server.utils.SecurityConstants;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
-import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -24,7 +23,7 @@ import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
-public class OauthExternalController {
+public class OauthFederatedController {
 
     private final FederatedService federatedService;
 
@@ -33,9 +32,9 @@ public class OauthExternalController {
             @Parameter(name = "source", description = "登录来源", in = ParameterIn.QUERY),
             @Parameter(name = "bind", description = "是否为绑定操作(true:是，false:否)", in = ParameterIn.QUERY)
     })
-    @GetMapping(SecurityConstants.OAUTH_EXTERNAL_AUTHORIZE_URI)
+    @GetMapping(SecurityConstants.OAUTH_FEDERATED_AUTHORIZE_URI)
     public void authorize(HttpServletRequest request, HttpServletResponse response,
-                          @RequestParam("source") String source,
+                          @PathVariable("source") String source,
                           @RequestParam(value = "bind", required = false, defaultValue = "false") Boolean bind) throws IOException {
         federatedService.authorize(request, response, source, bind, UUID.randomUUID().toString());
     }
@@ -44,7 +43,7 @@ public class OauthExternalController {
     @Parameters({
             @Parameter(name = "source", description = "登录来源", in = ParameterIn.PATH)
     })
-    @RequestMapping(value = SecurityConstants.OAUTH_EXTERNAL_CALLBACK_URI, method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = SecurityConstants.OAUTH_FEDERATED_CALLBACK_URI, method = {RequestMethod.GET, RequestMethod.POST})
     public void callback(HttpServletRequest request, HttpServletResponse response,
                          @PathVariable("source") String source, AuthCallback callback) throws ServletException, IOException {
         federatedService.callback(request, response, source, callback);
@@ -56,12 +55,12 @@ public class OauthExternalController {
             @Parameter(name = OAuth2ParameterNames.PASSWORD, description = "密码", in = ParameterIn.QUERY),
             @Parameter(name = SecurityConstants.OAUTH_FORM_LOGIN_TYPE_PARAM, description = "登录类型", in = ParameterIn.QUERY)
     })
-    @PostMapping(SecurityConstants.OAUTH_EXTERNAL_REGISTER_URI)
+    @PostMapping(SecurityConstants.OAUTH_FEDERATED_REGISTER_URI)
     public void register(HttpServletRequest request, HttpServletResponse response,
                          @RequestParam(OAuth2ParameterNames.USERNAME) String username,
                          @RequestParam(OAuth2ParameterNames.PASSWORD) String password,
                          @RequestParam(SecurityConstants.OAUTH_FORM_LOGIN_TYPE_PARAM) String loginType,
-                         @SessionAttribute(value = WebAttributes.AUTHENTICATION_EXCEPTION, required = false) AuthUser authUser)
+                         @SessionAttribute(value = SecurityConstants.AUTH_FEDERATED_USER) AuthUser authUser)
             throws ServletException, IOException {
         federatedService.register(request, response, username, password, loginType, authUser);
     }
@@ -70,7 +69,7 @@ public class OauthExternalController {
     @Parameters({
             @Parameter(name = "error", description = "错误信息", in = ParameterIn.QUERY)
     })
-    @GetMapping(SecurityConstants.OAUTH_EXTERNAL_OUTCOME_PAGE_URI)
+    @GetMapping(SecurityConstants.OAUTH_FEDERATED_OUTCOME_PAGE_URI)
     public String outcome(Model model, @RequestParam(required = false) String error) {
         model.addAttribute("error", false);
         if (StringUtils.hasLength(error)) {
@@ -84,8 +83,8 @@ public class OauthExternalController {
     @Parameters({
             @Parameter(name = "source", description = "登录来源", in = ParameterIn.QUERY)
     })
-    @DeleteMapping(SecurityConstants.OAUTH_EXTERNAL_REVOKE_URI)
-    public void revoke(HttpServletRequest request, HttpServletResponse response, @RequestParam String source) {
+    @DeleteMapping(SecurityConstants.OAUTH_FEDERATED_REVOKE_URI)
+    public void revoke(HttpServletRequest request, HttpServletResponse response, @PathVariable("source") String source) {
         federatedService.revoke(request, response, source);
     }
 

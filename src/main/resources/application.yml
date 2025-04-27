@@ -32,18 +32,6 @@ spring:
       authorizationserver:
         multiple-issuers-allowed: false
         issuer: http://127.0.0.1:9898
-        endpoint:
-          authorizationUri: /oauth/authorize
-          deviceAuthorizationUri: /oauth/device_authorization
-          deviceVerificationUri: /oauth/device_verification
-          tokenUri: /oauth/token
-          jwkSetUri: /oauth/jwks
-          tokenRevocationUri: /oauth/revoke
-          tokenIntrospectionUri: /oauth/introspect
-          oidc:
-            logoutUri: /connect/logout
-            clientRegistrationUri: /connect/register
-            userInfoUri: /userinfo
 
 springdoc:
   show-login-endpoint: true
@@ -66,7 +54,25 @@ hasp:
   cert:
     dir: /certs
 
-
+justauth:
+  enabled: true
+  type:
+    WECHAT_OPEN:
+      client-id: xxx
+      client-secret: xxx
+      redirect-uri: http://127.0.0.1:9898/oauth2/federated/callback/wechat_open
+    GOOGLE:
+      client-id: xxx
+      client-secret: xxx
+      redirect-uri: http://127.0.0.1:9898/oauth2/federated/callback/github
+    GITHUB:
+      client-id: xxx
+      client-secret: xxx
+      redirect-uri: http://127.0.0.1:9898/oauth2/federated/callback/google
+  cache:
+    type: custom
+    prefix: 'oauth2_federated_state:'
+    timeout: 10m
 
 logging:
   config: classpath:logback/logback-spring.xml

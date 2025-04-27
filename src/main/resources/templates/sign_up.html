@@ -172,7 +172,7 @@
             </li>
         </ul>
 
-        <form name="login_form" method="post" th:action="@{/oauth/login}">
+        <form name="login_form" method="post" th:action="@{/oauth2/login}">
             <div class="tab-content" id="tabContent">
                 <div class="tab-pane show active" id="phone_tab" role="tabpanel" aria-labelledby="phone-tab">
                     <input type="hidden" name="login_type" value="register_phone">
@@ -223,8 +223,8 @@
             </button>
 
             <div class="d-flex justify-content-between fs-14px">
-                <a class="text-primary" style="text-decoration: none;" href='/oauth/sign_up'>忘记密码</a>
-                <a class="text-primary" style="text-decoration: none;" href='/oauth/sign_in'>返回登录</a>
+                <a class="text-primary" style="text-decoration: none;" href='/oauth2/sign_up'>忘记密码</a>
+                <a class="text-primary" style="text-decoration: none;" href='/oauth2/sign_in'>返回登录</a>
             </div>
         </form>
     </div>

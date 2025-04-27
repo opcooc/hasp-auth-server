@@ -175,7 +175,7 @@
 
         <div class="tab-content" id="tabContent">
             <div class="tab-pane show active" id="contact_tab" role="tabpanel" aria-labelledby="contact-tab">
-                <form name="login_contact_form" method="post" th:action="@{/oauth/login}">
+                <form name="login_contact_form" method="post" th:action="@{/oauth2/login}">
                     <input type="hidden" name="login_type" value="phone">
 
                     <div class="mb-4">
@@ -206,7 +206,7 @@
                 </form>
             </div>
             <div class="tab-pane" id="password_tab" role="tabpanel" aria-labelledby="password-tab">
-                <form name="login_password_form" method="post" th:action="@{/oauth/login}">
+                <form name="login_password_form" method="post" th:action="@{/oauth2/login}">
                     <input type="hidden" name="login_type" value="username">
                     <div class="mb-4">
                         <input type="text" id="username" name="username" placeholder="请输入手机号/邮箱地址"
@@ -230,8 +230,8 @@
                     </button>
 
                     <div class="d-flex justify-content-between mb-3 fs-14px">
-                        <a class="text-primary" style="text-decoration: none;" href='/oauth/sign_up'>忘记密码</a>
-                        <a class="text-primary" style="text-decoration: none;" href='/oauth/sign_up'>立即注册</a>
+                        <a class="text-primary" style="text-decoration: none;" href='/oauth2/sign_up'>忘记密码</a>
+                        <a class="text-primary" style="text-decoration: none;" href='/oauth2/sign_up'>立即注册</a>
                     </div>
 
                 </form>
@@ -246,13 +246,13 @@
             </div>
         </div>
 
-        <a class="mb-2 h-40px btn btn-light w-100" href='/oauth/external/authorize/wechat_open'>
+        <a class="mb-2 h-40px btn btn-light w-100" href='/oauth2/federated/authorize/wechat_open'>
             <img src="/assets/images/wechat.png" height="25" alt="Sign in with WeChat"> Sign in with WeChat
         </a>
-        <a class="mb-2 h-40px btn btn-light w-100" href='/oauth/external/authorize/github'>
+        <a class="mb-2 h-40px btn btn-light w-100" href='/oauth2/federated/authorize/github'>
             <img src="/assets/images/github.png" height="25" alt="Sign in with GitHub"> Sign in with GitHub
         </a>
-        <a class="mb-2 h-40px btn btn-light w-100" href='/oauth/external/authorize/google'>
+        <a class="mb-2 h-40px btn btn-light w-100" href='/oauth2/federated/authorize/google'>
             <img src="/assets/images/google.png" height="25" alt="Sign in with Google"> Sign in with Google
         </a>
     </div>

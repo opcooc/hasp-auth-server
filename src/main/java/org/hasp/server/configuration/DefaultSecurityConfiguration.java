@@ -32,8 +32,8 @@ public class DefaultSecurityConfiguration {
             customizer.requestMatchers(
                             "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
                             "/assets/**",
-                            SecurityConstants.OAUTH_EXTERNAL_AUTHORIZE_URI,
-                            SecurityConstants.OAUTH_EXTERNAL_CALLBACK_URI,
+                            SecurityConstants.OAUTH_FEDERATED_AUTHORIZE_URI,
+                            SecurityConstants.OAUTH_FEDERATED_CALLBACK_URI,
                             SecurityConstants.OAUTH_SIGN_UP_PAGE_URI)
                     .permitAll()
                     .anyRequest()
