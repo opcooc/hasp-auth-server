@@ -19,60 +19,59 @@ import java.util.Set;
 public class MemoryTransferClientRepository implements TransferClientRepository {
 
     private final PasswordEncoder passwordEncoder;
+    private final static TransferClient CLIENT = TransferClient.builder()
+            .id("1862438268228636674")
+            .clientId("demo")
+            .clientIdIssuedAt(Instant.parse("2020-01-01T00:00:00Z"))
+            .clientSecret("{bcrypt}$2a$10$C//sbdBF.E0Nv1pywpExKuFUOg/8Zs1YqrMJPmbv6mkuXRO5CCK0i")// demo
+            .clientSecretExpiresAt(Instant.parse("2505-01-01T00:00:00Z"))
+            .clientName("HASP Technology Co., Ltd")
+            .clientAuthenticationMethods(Set.of(
+                    ClientAuthenticationMethod.NONE.getValue(),
+                    ClientAuthenticationMethod.CLIENT_SECRET_BASIC.getValue(),
+                    ClientAuthenticationMethod.CLIENT_SECRET_POST.getValue()
+            ))
+            .authorizationGrantTypes(Set.of(
+                    AuthorizationGrantType.REFRESH_TOKEN.getValue(),
+                    AuthorizationGrantType.CLIENT_CREDENTIALS.getValue(),
+                    AuthorizationGrantType.DEVICE_CODE.getValue(),
+                    AuthorizationGrantType.AUTHORIZATION_CODE.getValue(),
+                    AuthorizationGrantType.TOKEN_EXCHANGE.getValue(),
+                    AuthorizationGrantType.JWT_BEARER.getValue()
+            ))
+            .redirectUris(Set.of(
+                    "http://127.0.0.1:9527/home",
+                    "http://127.0.0.1:9898/swagger-ui/oauth2-redirect.html"
+            ))
+            .postLogoutRedirectUris(Set.of("http://127.0.0.1:9527/login"))
+            .scopes(Set.of("client.management", "user.management", "openid", "profile"))
+            .clientSettings(AppClientSettings.builder()
+                    .requireAuthorizationConsent(true)
+                    .build())
+            .tokenSettings(AppTokenSettings.builder()
+                    .authorizationCodeTimeToLive(300L)
+                    .accessTokenTimeToLive(86400L)
+                    .accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED.getValue())
+                    .deviceCodeTimeToLive(300L)
+                    .reuseRefreshTokens(true)
+                    .refreshTokenTimeToLive(259200L)
+                    .idTokenSignatureAlgorithm(SignatureAlgorithm.RS256.getName())
+                    .build())
+            .build();
 
     @Override
     public void save(TransferClient client) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public TransferClient findById(String id) {
-        return client();
+        return CLIENT;
     }
 
     @Override
     public TransferClient findByClientId(String clientId) {
-        return client();
+        return CLIENT;
     }
 
-    private TransferClient client() {
-        return TransferClient.builder()
-                .id("1862438268228636674")
-                .clientId("demo")
-                .clientIdIssuedAt(Instant.parse("2020-01-01T00:00:00Z"))
-                .clientSecret(passwordEncoder.encode("demo"))
-                .clientSecretExpiresAt(Instant.parse("2505-01-01T00:00:00Z"))
-                .clientName("HASP Technology Co., Ltd")
-                .clientAuthenticationMethods(Set.of(
-                        ClientAuthenticationMethod.NONE.getValue(),
-                        ClientAuthenticationMethod.CLIENT_SECRET_BASIC.getValue(),
-                        ClientAuthenticationMethod.CLIENT_SECRET_POST.getValue()
-                ))
-                .authorizationGrantTypes(Set.of(
-                        AuthorizationGrantType.REFRESH_TOKEN.getValue(),
-                        AuthorizationGrantType.CLIENT_CREDENTIALS.getValue(),
-                        AuthorizationGrantType.DEVICE_CODE.getValue(),
-                        AuthorizationGrantType.AUTHORIZATION_CODE.getValue(),
-                        AuthorizationGrantType.TOKEN_EXCHANGE.getValue(),
-                        AuthorizationGrantType.JWT_BEARER.getValue()
-                ))
-                .redirectUris(Set.of(
-                        "http://127.0.0.1:9527/home",
-                        "http://127.0.0.1:9898/swagger-ui/oauth2-redirect.html"
-                ))
-                .postLogoutRedirectUris(Set.of("http://127.0.0.1:9527/login"))
-                .scopes(Set.of("client.management", "user.management", "openid", "profile"))
-                .clientSettings(AppClientSettings.builder()
-                        .requireAuthorizationConsent(true)
-                        .build())
-                .tokenSettings(AppTokenSettings.builder()
-                        .authorizationCodeTimeToLive(300L)
-                        .accessTokenTimeToLive(86400L)
-                        .accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED.getValue())
-                        .deviceCodeTimeToLive(300L)
-                        .reuseRefreshTokens(true)
-                        .refreshTokenTimeToLive(259200L)
-                        .idTokenSignatureAlgorithm(SignatureAlgorithm.RS256.getName())
-                        .build())
-                .build();
-    }
 }

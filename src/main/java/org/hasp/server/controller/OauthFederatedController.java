@@ -53,17 +53,15 @@ public class OauthFederatedController {
     @Operation(summary = "联合登录注册", description = "需要在第三方系统配置")
     @Parameters({
             @Parameter(name = OAuth2ParameterNames.USERNAME, description = "账户", in = ParameterIn.QUERY),
-            @Parameter(name = OAuth2ParameterNames.PASSWORD, description = "密码", in = ParameterIn.QUERY),
             @Parameter(name = SecurityConstants.OAUTH_FORM_LOGIN_TYPE_PARAM, description = "登录类型", in = ParameterIn.QUERY)
     })
     @PostMapping(SecurityConstants.OAUTH_FEDERATED_REGISTER_URI)
     public void register(HttpServletRequest request, HttpServletResponse response,
                          @RequestParam(OAuth2ParameterNames.USERNAME) String username,
-                         @RequestParam(OAuth2ParameterNames.PASSWORD) String password,
                          @RequestParam(SecurityConstants.OAUTH_FORM_LOGIN_TYPE_PARAM) String loginType,
                          @SessionAttribute(value = SecurityConstants.AUTH_FEDERATED_USER) AuthUser authUser)
             throws ServletException, IOException {
-        federatedService.register(request, response, username, password, loginType, authUser);
+        federatedService.register(request, response, username, loginType, authUser);
     }
 
     @Operation(summary = "联合登录绑定回调页面", description = "系统内置页面")

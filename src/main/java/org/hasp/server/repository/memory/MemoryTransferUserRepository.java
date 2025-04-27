@@ -19,27 +19,45 @@ public class MemoryTransferUserRepository implements TransferUserRepository {
 
     private final PasswordEncoder passwordEncoder;
     private final static Map<String, TransferUser> USER_MAP = new HashMap<>();
-    private final static Map<String, String> USER_ID_USER_MAP = new HashMap<>();
+
+    static {
+        TransferUser adminUser = TransferUser.builder()
+                .subject("MEMORY_TRANSFER_USER_ID")
+                .nickname("MEMORY_TRANSFER_NICKNAME")
+                .username("admin")
+                .source(SecurityConstants.OAUTH_FORM_USERNAME_LOGIN_TYPE)
+                .password("{bcrypt}$2a$10$B0MXaXhil1.2Z.ROCWMQiuZ1MSVcqF.Hmt9/z1ieFgEhtS9XZsa0y") // password
+                .authorities(Collections.singleton("MEMORY_TRANSFER_ROLE_USER"))
+                .build();
+
+        USER_MAP.put("admin" + SecurityConstants.OAUTH_FORM_USERNAME_LOGIN_TYPE, adminUser);
+        USER_MAP.put(adminUser.getSubject(), adminUser);
+    }
 
     @Override
     public TransferUser load(String username, String source) {
-        TransferUser user = USER_MAP.computeIfAbsent(username + source, key ->
-                TransferUser.builder()
-                        .subject(UUID.randomUUID().toString().replace("-", ""))
-                        .nickname("nickname")
-                        .username(username)
-                        .source(source)
-                        .password(passwordEncoder.encode("password"))
-                        .authorities(Collections.singleton("ROLE_USER"))
-                        .build());
-        USER_ID_USER_MAP.put(user.getSubject(), username + source);
+        TransferUser user = USER_MAP.get(username + source);
+        if (user == null && StringUtils.equalsAny(source,
+                SecurityConstants.OAUTH_FORM_PHONE_LOGIN_TYPE, SecurityConstants.OAUTH_FORM_EMAIL_LOGIN_TYPE)) {
+            TransferUser memoryTransferUser = TransferUser.builder()
+                    .subject(UUID.randomUUID().toString().replace("-", ""))
+                    .username(username)
+                    .source(source)
+                    .email(StringUtils.equalsAny(source, SecurityConstants.OAUTH_FORM_PHONE_LOGIN_TYPE) ? username : null)
+                    .emailVerified(true)
+                    .phoneNumber(StringUtils.equalsAny(source, SecurityConstants.OAUTH_FORM_EMAIL_LOGIN_TYPE) ? username : null)
+                    .phoneNumberVerified(true)
+                    .authorities(Collections.singleton("MEMORY_TRANSFER_ROLE_USER"))
+                    .build();
+            USER_MAP.put(username + source, memoryTransferUser);
+            USER_MAP.put(memoryTransferUser.getSubject(), memoryTransferUser);
+        }
         return user;
     }
 
     @Override
     public void register(Map<String, Object> map) {
         String type = (String) map.get("type");
-
         if (StringUtils.equals(type, "bind")) {
             String id = (String) map.get("id");
             String source = (String) map.get("source");
@@ -53,11 +71,7 @@ public class MemoryTransferUserRepository implements TransferUserRepository {
                 }
                 return;
             }
-            String key = USER_ID_USER_MAP.get(userId);
-            if (key == null) {
-                throw new InternalAuthenticationServiceException("用户不存在");
-            }
-            user = USER_MAP.get(key);
+            user = USER_MAP.get(userId);
             if (user == null) {
                 throw new InternalAuthenticationServiceException("用户不存在");
             }
@@ -70,7 +84,6 @@ public class MemoryTransferUserRepository implements TransferUserRepository {
             String email = (String) map.get("email");
             String phoneNumber = (String) map.get("phoneNumber");
             String username = (String) map.get("username");
-            String password = (String) map.get("password");
             String gender = (String) map.get("gender");
             String picture = (String) map.get("picture");
 
@@ -92,14 +105,13 @@ public class MemoryTransferUserRepository implements TransferUserRepository {
                         .subject(UUID.randomUUID().toString().replace("-", ""))
                         .username(username)
                         .source(SecurityConstants.OAUTH_FORM_USERNAME_LOGIN_TYPE)
-                        .password(passwordEncoder.encode(password))
                         .email(email)
                         .emailVerified(true)
                         .phoneNumber(phoneNumber)
                         .phoneNumberVerified(true)
                         .gender(gender)
                         .picture(picture)
-                        .authorities(Collections.singleton("ROLE_USER"))
+                        .authorities(Collections.singleton("MEMORY_TRANSFER_ROLE_USER"))
                         .build();
                 if (email != null) {
                     USER_MAP.put(email + SecurityConstants.OAUTH_FORM_EMAIL_LOGIN_TYPE, user);
@@ -107,6 +119,7 @@ public class MemoryTransferUserRepository implements TransferUserRepository {
                 if (phoneNumber != null) {
                     USER_MAP.put(phoneNumber + SecurityConstants.OAUTH_FORM_PHONE_LOGIN_TYPE, user);
                 }
+                USER_MAP.put(user.getSubject(), user);
             }
             USER_MAP.put(id + source, user);
         }
@@ -114,9 +127,8 @@ public class MemoryTransferUserRepository implements TransferUserRepository {
 
     @Override
     public void updatePassword(String userId, String newPassword) {
-        String key = USER_ID_USER_MAP.get(userId);
-        if (key != null) {
-            TransferUser user = USER_MAP.get(key);
+        TransferUser user = USER_MAP.get(userId);
+        if (user != null) {
             user.setPassword(newPassword);
         }
     }

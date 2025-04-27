@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import lombok.RequiredArgsConstructor;
+import me.zhyd.oauth.model.AuthUser;
 import org.hasp.server.dto.core.BasicScope;
 import org.hasp.server.utils.SecurityConstants;
 import org.hasp.server.utils.SecurityUtils;
@@ -19,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -38,7 +40,14 @@ public class OauthController {
 
     @Operation(summary = "注册页面", description = "系统内置页面")
     @GetMapping(SecurityConstants.OAUTH_SIGN_UP_PAGE_URI)
-    public String signUp() {
+    public String signUp(Model model,
+                         @SessionAttribute(value = SecurityConstants.AUTH_FEDERATED_USER, required = false) AuthUser authUser) {
+        model.addAttribute("requestURI", authUser == null
+                ? SecurityConstants.OAUTH_LOGIN_URI
+                : SecurityConstants.OAUTH_FEDERATED_REGISTER_URI);
+        model.addAttribute("signUpTitle", authUser == null
+                ? "手机号注册"
+                : "绑定手机号");
         return "sign_up";
     }
 

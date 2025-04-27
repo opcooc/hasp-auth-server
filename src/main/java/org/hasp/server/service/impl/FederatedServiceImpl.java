@@ -97,7 +97,7 @@ public class FederatedServiceImpl implements FederatedService {
                 if (session != null) {
                     request.getSession().setAttribute(SecurityConstants.AUTH_FEDERATED_USER, authUser);
                 }
-                redirectStrategy.sendRedirect(request, response, SecurityConstants.OAUTH_FEDERATED_REGISTER_URI);
+                redirectStrategy.sendRedirect(request, response, SecurityConstants.OAUTH_SIGN_UP_PAGE_URI);
                 return;
             }
 
@@ -117,16 +117,16 @@ public class FederatedServiceImpl implements FederatedService {
 
     @Override
     public void register(HttpServletRequest request, HttpServletResponse response,
-                         String username, String password, String loginType, AuthUser authUser) throws ServletException, IOException {
+                         String username, String loginType, AuthUser authUser) throws ServletException, IOException {
         try {
             try {
-                transferUserRepository.register(UserMapper.toRegisterMap(authUser, "register", username, password, loginType, null));
+                transferUserRepository.register(UserMapper.toRegisterMap(authUser, "register", username, null, loginType, null));
             } catch (Exception e) {
                 HttpSession session = request.getSession(false);
                 if (session != null) {
                     request.getSession().setAttribute(SecurityConstants.AUTH_FEDERATED_USER, authUser);
                 }
-                redirectStrategy.sendRedirect(request, response, SecurityConstants.OAUTH_FEDERATED_REGISTER_URI);
+                redirectStrategy.sendRedirect(request, response, SecurityConstants.OAUTH_SIGN_UP_PAGE_URI);
                 return;
             }
 

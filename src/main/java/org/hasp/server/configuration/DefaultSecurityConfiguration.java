@@ -34,7 +34,8 @@ public class DefaultSecurityConfiguration {
                             "/assets/**",
                             SecurityConstants.OAUTH_FEDERATED_AUTHORIZE_URI,
                             SecurityConstants.OAUTH_FEDERATED_CALLBACK_URI,
-                            SecurityConstants.OAUTH_SIGN_UP_PAGE_URI)
+                            SecurityConstants.OAUTH_SIGN_UP_PAGE_URI,
+                            SecurityConstants.OAUTH_FEDERATED_REGISTER_URI)
                     .permitAll()
                     .anyRequest()
                     .authenticated();

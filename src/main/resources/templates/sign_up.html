@@ -154,50 +154,15 @@
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="form-max-width">
 
-        <div class="d-flex justify-content-center align-items-center mb-4">
-            <img src="/assets/images/hasp-icon.svg" alt="logo" width="46">
-            <span class="fw-bold text-primary" style="font-size: 32px; line-height: 46px;">HASPSERVER</span>
+        <div class="row mb-4 h-50px">
+            <h2 class="text-primary text-center" th:text="${signUpTitle}" />
         </div>
 
-        <ul class="nav nav-tabs mb-3" id="tab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="phone-tab" data-bs-toggle="tab" data-bs-target="#phone_tab"
-                        type="button" role="tab" aria-controls="phone" aria-selected="true">手机号注册
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="email-tab" data-bs-toggle="tab" data-bs-target="#email_tab"
-                        type="button" role="tab" aria-controls="email" aria-selected="false">邮箱注册
-                </button>
-            </li>
-        </ul>
-
-        <form name="login_form" method="post" th:action="@{/oauth2/login}">
-            <div class="tab-content" id="tabContent">
-                <div class="tab-pane show active" id="phone_tab" role="tabpanel" aria-labelledby="phone-tab">
-                    <input type="hidden" name="login_type" value="register_phone">
-                    <div class="mb-4">
-                        <input type="text" name="username" placeholder="请输入手机号"
-                               class="form-control h-40px fs-14px" required>
-                    </div>
-                </div>
-
-                <div class="tab-pane" id="email_tab" role="tabpanel" aria-labelledby="email-tab">
-                    <input type="hidden" name="login_type" value="register_email">
-                    <div class="mb-4">
-                        <input type="text" name="username" placeholder="请输入邮箱"
-                               class="form-control h-40px fs-14px" required>
-                    </div>
-                </div>
-            </div>
+        <form name="login_form" method="post" th:action="${requestURI}">
+            <input type="hidden" name="login_type" value="phone">
 
             <div class="mb-4">
-                <input type="password" name="password" placeholder="请输入密码"
-                       class="form-control h-40px fs-14px" required>
-            </div>
-
-            <div class="mb-4">
-                <input type="password" name="repeatPassword" placeholder="请再次输入密码"
+                <input type="text" name="username" placeholder="请输入手机号"
                        class="form-control h-40px fs-14px" required>
             </div>
 
@@ -223,7 +188,7 @@
             </button>
 
             <div class="d-flex justify-content-between fs-14px">
-                <a class="text-primary" style="text-decoration: none;" href='/oauth2/sign_up'>忘记密码</a>
+                <a class="text-primary" style="text-decoration: none;" href=''>忘记密码</a>
                 <a class="text-primary" style="text-decoration: none;" href='/oauth2/sign_in'>返回登录</a>
             </div>
         </form>

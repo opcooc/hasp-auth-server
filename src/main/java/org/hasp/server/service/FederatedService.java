@@ -15,7 +15,7 @@ public interface FederatedService {
 
     void callback(HttpServletRequest request, HttpServletResponse response, String source, AuthCallback callback) throws ServletException, IOException;
 
-    void register(HttpServletRequest request, HttpServletResponse response, String username, String password, String loginType, AuthUser authUser) throws ServletException, IOException;
+    void register(HttpServletRequest request, HttpServletResponse response, String username, String loginType, AuthUser authUser) throws ServletException, IOException;
 
     AuthResponse<?> revoke(HttpServletRequest request, HttpServletResponse response, String source);
 
