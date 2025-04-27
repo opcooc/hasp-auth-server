@@ -8,13 +8,14 @@ import org.hasp.server.repository.core.TransferUserRepository;
 import org.hasp.server.support.CustomUser;
 import org.hasp.server.utils.HttpUtils;
 import org.hasp.server.utils.SecurityConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final TransferUserRepository transferUserRepository;

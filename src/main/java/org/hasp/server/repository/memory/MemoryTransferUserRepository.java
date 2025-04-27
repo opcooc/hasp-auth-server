@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hasp.server.dto.TransferUser;
 import org.hasp.server.repository.core.TransferUserRepository;
 import org.hasp.server.utils.SecurityConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -13,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class MemoryTransferUserRepository implements TransferUserRepository {
 
     private final PasswordEncoder passwordEncoder;

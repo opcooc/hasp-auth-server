@@ -5,6 +5,7 @@ import org.hasp.server.dto.TransferClient;
 import org.hasp.server.dto.core.AppClientSettings;
 import org.hasp.server.dto.core.AppTokenSettings;
 import org.hasp.server.repository.core.TransferClientRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.lang.Nullable;
@@ -27,7 +28,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Repository
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class DelegateRegisteredClientRepository implements RegisteredClientRepository {
 
     private final TransferClientRepository transferClientRepository;

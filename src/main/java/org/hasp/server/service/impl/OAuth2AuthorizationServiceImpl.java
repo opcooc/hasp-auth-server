@@ -7,6 +7,7 @@ import org.hasp.server.entity.core.*;
 import org.hasp.server.repository.redis.RedisOAuth2AuthorizationRepository;
 import org.hasp.server.utils.HttpUtils;
 import org.hasp.server.utils.JsonUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.hasp.server.support.CustomUser;
@@ -31,7 +32,7 @@ import java.security.Principal;
 import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class OAuth2AuthorizationServiceImpl implements OAuth2AuthorizationService {
 
     private final RegisteredClientRepository registeredClientRepository;

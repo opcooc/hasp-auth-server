@@ -12,6 +12,7 @@ import me.zhyd.oauth.model.AuthCallback;
 import me.zhyd.oauth.model.AuthUser;
 import org.hasp.server.service.FederatedService;
 import org.hasp.server.utils.SecurityConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +23,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 @Controller
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class OauthFederatedController {
 
     private final FederatedService federatedService;

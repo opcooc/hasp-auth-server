@@ -3,6 +3,7 @@ package org.hasp.server.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.hasp.server.entity.OAuth2AuthorizationConsentEntity;
 import org.hasp.server.repository.redis.RedisOAuth2AuthorizationConsentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsent;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class OAuth2AuthorizationConsentServiceImpl implements OAuth2AuthorizationConsentService {
 
     private final RedisOAuth2AuthorizationConsentRepository redisOAuth2AuthorizationConsentRepository;

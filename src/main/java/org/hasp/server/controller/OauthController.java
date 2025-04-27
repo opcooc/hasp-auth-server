@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.hasp.server.dto.core.BasicScope;
 import org.hasp.server.utils.SecurityConstants;
 import org.hasp.server.utils.SecurityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
@@ -23,7 +24,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Controller
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class OauthController {
 
     private final RegisteredClientRepository registeredClientRepository;

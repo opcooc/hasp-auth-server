@@ -3,10 +3,11 @@ package org.hasp.server.repository.remote;
 import lombok.RequiredArgsConstructor;
 import org.hasp.server.dto.TransferUser;
 import org.hasp.server.repository.core.TransferUserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class RemoteTransferUserRepository implements TransferUserRepository {
 
     @Override

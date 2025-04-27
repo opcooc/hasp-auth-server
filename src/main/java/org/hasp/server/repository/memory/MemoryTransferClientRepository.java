@@ -5,6 +5,7 @@ import org.hasp.server.dto.TransferClient;
 import org.hasp.server.dto.core.AppClientSettings;
 import org.hasp.server.dto.core.AppTokenSettings;
 import org.hasp.server.repository.core.TransferClientRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
@@ -14,7 +15,7 @@ import org.springframework.security.oauth2.server.authorization.settings.OAuth2T
 import java.time.Instant;
 import java.util.Set;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class MemoryTransferClientRepository implements TransferClientRepository {
 
     private final PasswordEncoder passwordEncoder;
