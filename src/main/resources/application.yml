@@ -16,8 +16,9 @@ spring:
     mode: HTML #LEGACYHTML5
   data:
     redis:
-      host: 127.0.0.1
-      port: 6379
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
       timeout: 3000ms
       connect-timeout: 5000
       client-type: LETTUCE
@@ -31,7 +32,19 @@ spring:
     oauth2:
       authorizationserver:
         multiple-issuers-allowed: false
-        issuer: http://127.0.0.1:9898
+        issuer: ${OAUTH2_ISSUER:http://127.0.0.1:9898}
+        endpoint:
+          authorizationUri: ${OAUTH2_AUTHORIZATION_URI:/oauth2/authorize}
+          deviceAuthorizationUri: ${OAUTH2_DEVICE_AUTHORIZATION_URI:/oauth2/device_authorization}
+          deviceVerificationUri: ${OAUTH2_DEVICE_VERIFICATION_URI:/oauth2/device_verification}
+          tokenUri: ${OAUTH2_TOKEN_URI:/oauth2/token}
+          jwkSetUri: ${OAUTH2_JWK_SET_URI:/oauth2/jwks}
+          tokenRevocationUri: ${OAUTH2_TOKEN_REVOCATION_URI:/oauth2/revoke}
+          tokenIntrospectionUri: ${OAUTH2_TOKEN_INTROSPECTION_URI:/oauth2/introspect}
+          oidc:
+            logoutUri: ${OAUTH2_LOGOUT_URI:/connect/logout}
+            clientRegistrationUri: ${OAUTH2_CLIENT_REGISTRATION_URI:/connect/register}
+            userInfoUri: ${OAUTH2_USER_INFO_URI:/userinfo}
 
 springdoc:
   show-login-endpoint: true
@@ -50,29 +63,29 @@ springdoc:
 
 hasp:
   data:
-    type: memory
+    type: ${HASP_DATA_TYPE:memory} # 动态配置数据类型(memory、remote)，默认为 memory
   cert:
-    dir: /certs
+    dir: ${CERT_DIR:/certs} # 动态配置证书目录
 
 justauth:
   enabled: true
   type:
     WECHAT_OPEN:
-      client-id: xxx
-      client-secret: xxx
-      redirect-uri: http://127.0.0.1:9898/oauth2/federated/callback/wechat_open
-    GOOGLE:
-      client-id: xxx
-      client-secret: xxx
-      redirect-uri: http://127.0.0.1:9898/oauth2/federated/callback/github
+      client-id: ${WECHAT_OPEN_CLIENT_ID:xxx}
+      client-secret: ${WECHAT_OPEN_CLIENT_SECRET:xxx}
+      redirect-uri: ${WECHAT_OPEN_REDIRECT_URI:http://127.0.0.1:9898/oauth2/federated/callback/wechat_open}
+    GITEE:
+      client-id: ${GITEE_CLIENT_ID:xxx}
+      client-secret: ${GITEE_CLIENT_SECRET:xxx}
+      redirect-uri: ${GITEE_REDIRECT_URI:http://127.0.0.1:9898/oauth2/federated/callback/gitee}
     GITHUB:
-      client-id: xxx
-      client-secret: xxx
-      redirect-uri: http://127.0.0.1:9898/oauth2/federated/callback/google
+      client-id: ${GITHUB_CLIENT_ID:xxx}
+      client-secret: ${GITHUB_CLIENT_SECRET:xxx}
+      redirect-uri: ${GITHUB_REDIRECT_URI:http://127.0.0.1:9898/oauth2/federated/callback/github}
   cache:
-    type: custom
-    prefix: 'oauth2_federated_state:'
-    timeout: 10m
+    type: ${CACHE_TYPE:custom}
+    prefix: ${CACHE_PREFIX:oauth2_federated_state:}
+    timeout: ${CACHE_TIMEOUT:10m}
 
 logging:
   config: classpath:logback/logback-spring.xml
@@ -81,6 +94,3 @@ logging:
     org.springframework.web: TRACE
     org.springframework.security: TRACE
     org.springframework.security.oauth2: TRACE
-    io.lettuce.core: off
-    org.springframework.data.redis.core: off
-    org.springframework.session.data.redis: off

@@ -42,12 +42,8 @@ public class OauthController {
     @GetMapping(SecurityConstants.OAUTH_SIGN_UP_PAGE_URI)
     public String signUp(Model model,
                          @SessionAttribute(value = SecurityConstants.AUTH_FEDERATED_USER, required = false) AuthUser authUser) {
-        model.addAttribute("requestURI", authUser == null
-                ? SecurityConstants.OAUTH_LOGIN_URI
-                : SecurityConstants.OAUTH_FEDERATED_REGISTER_URI);
-        model.addAttribute("signUpTitle", authUser == null
-                ? "手机号注册"
-                : "绑定手机号");
+        model.addAttribute("requestURI", authUser == null ? SecurityConstants.OAUTH_LOGIN_URI : SecurityConstants.OAUTH_FEDERATED_REGISTER_URI);
+        model.addAttribute("signUpTitle", authUser == null ? "手机号注册" : "绑定手机号");
         return "sign_up";
     }
 

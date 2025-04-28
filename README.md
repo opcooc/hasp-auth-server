@@ -31,7 +31,6 @@ swagger-ui: `http://127.0.0.1:9898/swagger-ui/index.html`
 授权URL: `http://127.0.0.1:9898/oauth2/authorize?response_type=code&scope=profile%20openid&client_id=demo&redirect_uri=http://127.0.0.1:9527/home&state=8a0781548e7f76ae018e94e450982413`
 <br/>
 
-
 #### 内存启动时的内置账户信息
 | 描述                | 信息                                                                 |
 |---------------------|--------------------------------------------------------------------|
@@ -39,7 +38,7 @@ swagger-ui: `http://127.0.0.1:9898/swagger-ui/index.html`
 | 密码   | `password`                                                         |
 | client_id   | `demo`                                                             |
 | client_secret   | `demo`                                                             |
-| redirect_uri   | `http://127.0.0.1:9527/home` 代码MemoryTransferClientRepository文件可更改 |
+| redirect_uri   | `http://127.0.0.1:9527/home` MemoryTransferClientRepository文件可更改 |
 ## 项目截图
 
 <p align="center">
@@ -277,14 +276,14 @@ JustAuth 通过其统一的 API 进行认证授权，在本项目中已经实现
           client-id: your-client-id
           client-secret: your-client-secret
           redirect-uri: http://127.0.0.1:9898/oauth2/federated/callback/wechat_open
-        GOOGLE:
+        GITEE:
           client-id: your-client-id
           client-secret: your-client-secret
-          redirect-uri: http://127.0.0.1:9898/oauth2/federated/callback/github
+          redirect-uri: http://127.0.0.1:9898/oauth2/federated/callback/gitee
         GITHUB:
           client-id: your-client-id
           client-secret: your-client-secret
-          redirect-uri: http://127.0.0.1:9898/oauth2/federated/callback/google
+          redirect-uri: http://127.0.0.1:9898/oauth2/federated/callback/github
 
    ```
 
