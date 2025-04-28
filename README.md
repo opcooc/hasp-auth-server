@@ -21,6 +21,32 @@
 
 HASP Auth Server 是一个基于 Spring Authorization Server 的认证授权服务，支持标准 OAuth2 流程和 JWT 签发，用户信息、客户端信息通过外部 HTTP 服务动态获取，适用于中大型分布式系统的统一认证场景。
 
+## 项目截图
+
+<p align="center">
+  <img src="./docs/images/login_password.png" alt="login_password" style="width:100%;"/>
+</p>
+<br/>
+
+<p align="center">
+  <img src="./docs/images/login_phone.png" alt="login_phone" style="width:100%;"/>
+</p>
+<br/>
+
+<p align="center">
+  <img src="./docs/images/consent.png" alt="consent" style="width:100%;"/>
+</p>
+<br/>
+
+<p align="center">
+  <img src="./docs/images/federated_bind.png" alt="federated_bind" style="width:100%;"/>
+</p>
+<br/>
+
+<p align="center">
+  <img src="./docs/images/phone_register.png" alt="phone_register" style="width:100%;"/>
+</p>
+
 ---
 
 ## 技术选型
