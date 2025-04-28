@@ -1,43 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false" scan="false">
-	<springProperty scop="context" name="spring.application.name" source="spring.application.name" defaultValue="default-service"/>
+
+	<!-- 应用名称属性，从Spring环境获取 -->
+	<springProperty scope="context" name="spring.application.name"
+					source="spring.application.name" defaultValue="default-service"/>
+
+	<!-- 公共属性定义 -->
 	<property name="log.path" value="logs/${spring.application.name}"/>
-	<!-- 彩色日志格式 -->
+	<property name="max.history.days" value="30"/>
+	<property name="max.file.size" value="50MB"/>
+
+	<!-- 彩色日志配置 -->
 	<property name="CONSOLE_LOG_PATTERN"
 			  value="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
-	<!-- 彩色日志依赖的渲染类 -->
+
+	<!-- 日志转换规则 -->
 	<conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
-	<conversionRule conversionWord="wex"
-					converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
-	<conversionRule conversionWord="wEx"
-					converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
-	<!-- Console log output -->
+	<conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+	<conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+
+	<!-- 控制台输出 -->
 	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
 			<pattern>${CONSOLE_LOG_PATTERN}</pattern>
 		</encoder>
 	</appender>
 
-	<!-- Log file debug output -->
+	<!-- DEBUG级别文件输出 -->
 	<appender name="debug" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${log.path}/debug.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-			<fileNamePattern>${log.path}/%d{yyyy-MM, aux}/debug.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-			<maxFileSize>50MB</maxFileSize>
-			<maxHistory>30</maxHistory>
+			<fileNamePattern>${log.path}/debug/%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+			<maxFileSize>${max.file.size}</maxFileSize>
+			<maxHistory>${max.history.days}</maxHistory>
+			<!-- 总日志文件大小限制 -->
+			<totalSizeCap>1GB</totalSizeCap>
 		</rollingPolicy>
 		<encoder>
 			<pattern>%date [%thread] %-5level [%logger{50}] %file:%line - %msg%n</pattern>
 		</encoder>
 	</appender>
 
-	<!-- Log file error output -->
+	<!-- ERROR级别文件输出 -->
 	<appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${log.path}/error.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-			<fileNamePattern>${log.path}/%d{yyyy-MM}/error.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-			<maxFileSize>50MB</maxFileSize>
-			<maxHistory>30</maxHistory>
+			<fileNamePattern>${log.path}/error/%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+			<maxFileSize>${max.file.size}</maxFileSize>
+			<maxHistory>${max.history.days}</maxHistory>
+			<totalSizeCap>500MB</totalSizeCap>
 		</rollingPolicy>
 		<encoder>
 			<pattern>%date [%thread] %-5level [%logger{50}] %file:%line - %msg%n</pattern>
@@ -47,10 +58,16 @@
 		</filter>
 	</appender>
 
-	<!-- Level: FATAL 0  ERROR 3  WARN 4  INFO 6  DEBUG 7 -->
+	<!-- 日志级别配置 -->
 	<root level="DEBUG">
 		<appender-ref ref="console"/>
 		<appender-ref ref="debug"/>
 		<appender-ref ref="error"/>
 	</root>
+
+	<!-- 特定包日志级别配置示例 -->
+	<!--
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="com.example" level="DEBUG"/>
+    -->
 </configuration>
