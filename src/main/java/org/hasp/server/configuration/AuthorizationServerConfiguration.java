@@ -36,6 +36,8 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
@@ -108,12 +110,14 @@ public class AuthorizationServerConfiguration {
 
     @Bean
     public JWKSource<SecurityContext> jwkSource(@Value("${hasp.cert.dir}") String dir) throws IOException {
-        KeyUtils.generateAndSaveKeyPair(dir, "");
+        if (!Files.exists(Paths.get(dir, "current_kid.txt"))) {
+            KeyUtils.generateAndSaveKeyPair(dir);
+        }
         return (jwkSelector, securityContext) -> {
             try {
-                String kid = KeyUtils.loadCurrentKid(dir, "");
-                PublicKey publicKey = KeyUtils.loadCurrentPublicKey(dir, "");
-                PrivateKey privateKey = KeyUtils.loadCurrentPrivateKey(dir, "");
+                String kid = KeyUtils.loadCurrentKid(dir);
+                PublicKey publicKey = KeyUtils.loadCurrentPublicKey(dir);
+                PrivateKey privateKey = KeyUtils.loadCurrentPrivateKey(dir);
                 RSAKey rsaKey = new RSAKey.Builder((RSAPublicKey) publicKey).privateKey((RSAPrivateKey) privateKey).keyID(kid).build();
                 return jwkSelector.select(new JWKSet(rsaKey));
             } catch (Exception e) {

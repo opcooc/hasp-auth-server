@@ -36,8 +36,7 @@ public class KeyUtils {
         return timestamp + "_" + random;
     }
 
-    public static void generateAndSaveKeyPair(String dir, String tenant) throws IOException {
-        String dirPath = dir + "/" + tenant;
+    public static void generateAndSaveKeyPair(String dirPath) throws IOException {
         Files.createDirectories(Paths.get(dirPath));
         String kid = generateKid();
         KeyPair keyPair = generateRsaKeyPair();
@@ -62,25 +61,25 @@ public class KeyUtils {
         Files.writeString(path, pem);
     }
 
-    public static String loadCurrentKid(String dir, String tenant) throws IOException {
-        Path kidPath = Paths.get(dir, tenant, "current_kid.txt");
+    public static String loadCurrentKid(String dir) throws IOException {
+        Path kidPath = Paths.get(dir, "current_kid.txt");
         return Files.readString(kidPath).trim();
     }
 
-    public static PrivateKey loadCurrentPrivateKey(String dir, String tenant) throws Exception {
-        return loadPrivateKey(Paths.get(dir, tenant, "current_private.pem"));
+    public static PrivateKey loadCurrentPrivateKey(String dir) throws Exception {
+        return loadPrivateKey(Paths.get(dir, "current_private.pem"));
     }
 
-    public static PrivateKey loadPrivateKeyByKid(String dir, String tenant, String kid) throws Exception {
-        return loadPrivateKey(Paths.get(dir, tenant, "jwt_private_" + kid + ".pem"));
+    public static PrivateKey loadPrivateKeyByKid(String dir, String kid) throws Exception {
+        return loadPrivateKey(Paths.get(dir, "jwt_private_" + kid + ".pem"));
     }
 
-    public static PublicKey loadCurrentPublicKey(String dir, String tenant) throws Exception {
-        return loadPublicKey(Paths.get(dir, tenant, "current_public.pem"));
+    public static PublicKey loadCurrentPublicKey(String dir) throws Exception {
+        return loadPublicKey(Paths.get(dir, "current_public.pem"));
     }
 
-    public static PublicKey loadPublicKeyByKid(String dir, String tenant, String kid) throws Exception {
-        return loadPublicKey(Paths.get(dir, tenant, "jwt_public_" + kid + ".pem"));
+    public static PublicKey loadPublicKeyByKid(String dir, String kid) throws Exception {
+        return loadPublicKey(Paths.get(dir, "jwt_public_" + kid + ".pem"));
     }
 
     public static PublicKey loadPublicKey(Path filePath) throws Exception {
