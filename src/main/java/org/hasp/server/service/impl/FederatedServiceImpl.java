@@ -91,7 +91,7 @@ public class FederatedServiceImpl implements FederatedService {
                 return;
             }
 
-            TransferUser user = transferUserRepository.load(authUser.getUuid(), source);
+            TransferUser user = transferUserRepository.load(authUser.getUuid(), authUser.getSource());
             if (user == null) {
                 HttpSession session = request.getSession(false);
                 if (session != null) {

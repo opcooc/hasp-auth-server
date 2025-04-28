@@ -51,6 +51,7 @@ public class MemoryTransferUserRepository implements TransferUserRepository {
                     .build();
             USER_MAP.put(username + source, memoryTransferUser);
             USER_MAP.put(memoryTransferUser.getSubject(), memoryTransferUser);
+            return memoryTransferUser;
         }
         return user;
     }
