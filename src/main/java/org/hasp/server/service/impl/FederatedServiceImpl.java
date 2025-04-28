@@ -121,6 +121,7 @@ public class FederatedServiceImpl implements FederatedService {
         try {
             try {
                 transferUserRepository.register(UserMapper.toRegisterMap(authUser, "register", username, null, loginType, null));
+                request.getSession().removeAttribute(SecurityConstants.AUTH_FEDERATED_USER);
             } catch (Exception e) {
                 HttpSession session = request.getSession(false);
                 if (session != null) {
