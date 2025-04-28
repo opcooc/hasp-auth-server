@@ -15,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-//@EnableConfigurationProperties(JustAuthProperties.class)
 public class HaspConfiguration {
 
 
