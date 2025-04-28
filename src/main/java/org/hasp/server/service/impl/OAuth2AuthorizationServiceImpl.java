@@ -1,16 +1,14 @@
 package org.hasp.server.service.impl;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.hasp.server.entity.OAuth2AuthorizationEntity;
 import org.hasp.server.entity.core.*;
 import org.hasp.server.repository.redis.RedisOAuth2AuthorizationRepository;
-import org.hasp.server.utils.HttpUtils;
+import org.hasp.server.support.CustomUser;
 import org.hasp.server.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.hasp.server.support.CustomUser;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2DeviceCode;
 import org.springframework.security.oauth2.core.OAuth2RefreshToken;

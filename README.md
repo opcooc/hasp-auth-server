@@ -29,7 +29,17 @@ HASP Auth Server 是一个基于 Spring Authorization Server 的认证授权服�
 swagger-ui: `http://127.0.0.1:9898/swagger-ui/index.html`
 <br/>
 授权URL: `http://127.0.0.1:9898/oauth2/authorize?response_type=code&scope=profile%20openid&client_id=demo&redirect_uri=http://127.0.0.1:9527/home&state=8a0781548e7f76ae018e94e450982413`
+<br/>
 
+
+#### 内存启动时的内置账户信息
+| 描述                | 信息                                                                 |
+|---------------------|--------------------------------------------------------------------|
+| 账号   | `admin`                                                            |
+| 密码   | `password`                                                         |
+| client_id   | `demo`                                                             |
+| client_secret   | `demo`                                                             |
+| redirect_uri   | `http://127.0.0.1:9527/home` 代码MemoryTransferClientRepository文件可更改 |
 ## 项目截图
 
 <p align="center">

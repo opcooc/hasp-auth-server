@@ -43,8 +43,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'
     implementation 'org.springframework.boot:spring-boot-starter-json'
-    implementation 'com.squareup.okhttp3:okhttp'
-    implementation 'com.squareup.okhttp3:logging-interceptor'
+//    implementation 'com.squareup.okhttp3:okhttp'
+//    implementation 'com.squareup.okhttp3:logging-interceptor'
     implementation 'io.github.jayrobim:justauth-spring-boot-starter:1.4.1'
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4"
 
