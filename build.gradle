@@ -33,7 +33,6 @@ repositories {
     maven { url "https://maven.aliyun.com/repository/google" }
     mavenLocal()
     mavenCentral()
-    maven { url "https://build.shibboleth.net/nexus/content/repositories/releases/" }
 }
 
 dependencies {
