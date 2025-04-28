@@ -35,6 +35,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 
+import java.io.IOException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
@@ -106,7 +107,8 @@ public class AuthorizationServerConfiguration {
     }
 
     @Bean
-    public JWKSource<SecurityContext> jwkSource(@Value("${hasp.cert.dir}") String dir) {
+    public JWKSource<SecurityContext> jwkSource(@Value("${hasp.cert.dir}") String dir) throws IOException {
+        KeyUtils.generateAndSaveKeyPair(dir, "");
         return (jwkSelector, securityContext) -> {
             try {
                 String kid = KeyUtils.loadCurrentKid(dir, "");
