@@ -14,6 +14,7 @@
     - [Token 信息查询 (Token Introspection)](#token-introspection)
     - [获取 JWK 集合 (Get JWK Set)](#get-jwk-set)
 - [外部用户服务集成说明](#外部用户服务集成说明)
+- [定时轮换本地密钥文件](#定时轮换本地密钥文件)
 - [部署方式](#部署方式)
 - [使用示例](#使用示例)
 - [注意事项](#注意事项)
@@ -28,6 +29,7 @@ HASP Auth Server 是一个基于 Spring Authorization Server 的认证授权服�
 swagger-ui: `http://127.0.0.1:9898/swagger-ui/index.html`
 <br/>
 授权URL: `http://127.0.0.1:9898/oauth2/authorize?response_type=code&scope=profile%20openid&client_id=demo&redirect_uri=http://127.0.0.1:9527/home&state=8a0781548e7f76ae018e94e450982413`
+
 ## 项目截图
 
 <p align="center">
@@ -229,3 +231,61 @@ swagger-ui: `http://127.0.0.1:9898/swagger-ui/index.html`
 | `iat`            | int    | 令牌的签发时间（Unix 时间戳）      |
 
 ---
+
+## 外部用户服务集成说明
+
+本项目使用了 **[JustAuth](https://github.com/JustAuth/JustAuth)**，一个开源的第三方授权认证库，来实现多种平台的联合登录功能。JustAuth 提供了一种简便的方式，通过统一的接口支持多种第三方平台的 OAuth2.0 授权登录，包括但不限于：
+
+- **微信**
+- **微博**
+- **QQ**
+- **GitHub**
+- **Google**
+- **Facebook**
+- **Twitter**
+- **Gitee**
+
+### 为什么使用 JustAuth？
+JustAuth 简化了不同平台 OAuth2.0 登录的集成过程，它提供了：
+- 一致的接口，使得在多个平台间切换更加轻松。
+- 开放源代码和高度可定制的功能，能够根据需求修改和扩展。
+- 完整的 OAuth2.0 支持，确保认证流程的安全和规范。
+- 集成多个主流社交平台，避免了单独实现每个平台授权的繁琐过程。
+
+通过使用 JustAuth，项目能够轻松集成并扩展不同的登录方式，使用户可以选择多种方式进行快速登录，提升了用户体验。
+
+### 如何集成 JustAuth
+JustAuth 通过其统一的 API 进行认证授权，在本项目中已经实现了基本的集成。以下是配置和使用的一些关键步骤：
+
+1. **配置授权平台**
+   在 application.yml 文件中配置各平台的 API 密钥和回调地址。
+
+   ```
+   justauth:
+      oauth2:
+        WECHAT_OPEN:
+          client-id: your-client-id
+          client-secret: your-client-secret
+          redirect-uri: http://127.0.0.1:9898/oauth2/federated/callback/wechat_open
+        GOOGLE:
+          client-id: your-client-id
+          client-secret: your-client-secret
+          redirect-uri: http://127.0.0.1:9898/oauth2/federated/callback/github
+        GITHUB:
+          client-id: your-client-id
+          client-secret: your-client-secret
+          redirect-uri: http://127.0.0.1:9898/oauth2/federated/callback/google
+
+   ```
+
+## 定时轮换本地密钥文件
+
+1. **密钥生成与保存**：
+  - 使用 `KidGenerator` 生成 `kid`，并保存公私钥到 `.pem` 文件。
+  - 将当前 `kid` 存储在 `current_kid.txt`，并更新软链接 `current_private.pem` 和 `current_public.pem`。
+
+2. **公私钥加载**：
+  - 使用 `loadPublicKey` 加载公钥文件，生成 `PublicKey` 对象。
+  - 使用 `loadPrivateKey` 加载私钥文件，生成 `PrivateKey` 对象。
+3. **定时更新密钥文件**：
+  - 使用定时任务定时生成并更新软链接 `current_private.pem` 和 `current_public.pem`。
