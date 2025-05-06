@@ -1,6 +1,6 @@
 package org.hasp.server.configuration;
 
-
+import com.nimbusds.jose.KeySourceException;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
@@ -110,18 +110,24 @@ public class AuthorizationServerConfiguration {
 
     @Bean
     public JWKSource<SecurityContext> jwkSource(@Value("${hasp.cert.dir}") String dir) throws IOException {
-        if (!Files.exists(Paths.get(dir, "current_kid.txt"))) {
+        if (!Files.exists(Paths.get(dir, KeyUtils.CURRENT_KID))) {
             KeyUtils.generateAndSaveKeyPair(dir);
         }
         return (jwkSelector, securityContext) -> {
             try {
-                String kid = KeyUtils.loadCurrentKid(dir);
-                PublicKey publicKey = KeyUtils.loadCurrentPublicKey(dir);
-                PrivateKey privateKey = KeyUtils.loadCurrentPrivateKey(dir);
+                String kid = null;
+                if (jwkSelector.getMatcher().getKeyIDs() != null) {
+                    kid = jwkSelector.getMatcher().getKeyIDs().iterator().next();
+                }
+                if (kid == null) {
+                    kid = KeyUtils.loadCurrentKid(dir);
+                }
+                PublicKey publicKey = KeyUtils.loadPublicKeyByKid(dir, kid);
+                PrivateKey privateKey = KeyUtils.loadPrivateKeyByKid(dir, kid);
                 RSAKey rsaKey = new RSAKey.Builder((RSAPublicKey) publicKey).privateKey((RSAPrivateKey) privateKey).keyID(kid).build();
                 return jwkSelector.select(new JWKSet(rsaKey));
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new KeySourceException(e);
             }
         };
     }

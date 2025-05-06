@@ -70,7 +70,7 @@ public class AuthenticationEventListener {
     @EventListener
     public void onLoginFailure(AuthenticationFailureBadCredentialsEvent event) {
         // 当认证失败，尤其是由于错误的凭证（用户名/密码错误）时触发, 用于记录认证失败的详细信息，比如用户名/密码错误、账户锁定等。
-        // BadCredentialsException AuthenticationFailureBadCredentialsEvent
+        //BadCredentialsException AuthenticationFailureBadCredentialsEvent
         //UsernameNotFoundException AuthenticationFailureBadCredentialsEvent
         //AccountExpiredException AuthenticationFailureExpiredEvent
         //ProviderNotFoundException AuthenticationFailureProviderNotFoundEvent

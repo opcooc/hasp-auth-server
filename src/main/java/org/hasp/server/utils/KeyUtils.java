@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
@@ -14,6 +13,8 @@ import java.util.Base64;
 import java.util.Random;
 
 public class KeyUtils {
+
+    public static final String CURRENT_KID = "current_kid.txt";
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
     private static final Random RANDOM = new Random();
@@ -48,11 +49,7 @@ public class KeyUtils {
         savePem(publicPath, "PUBLIC KEY", keyPair.getPublic().getEncoded());
 
         // 更新 current_kid.txt
-        Files.writeString(Paths.get(dirPath, "current_kid.txt"), kid);
-
-        // 覆盖 current 指针（使用硬复制或符号链接）
-        Files.copy(privatePath, Paths.get(dirPath, "current_private.pem"), StandardCopyOption.REPLACE_EXISTING);
-        Files.copy(publicPath, Paths.get(dirPath, "current_public.pem"), StandardCopyOption.REPLACE_EXISTING);
+        Files.writeString(Paths.get(dirPath, CURRENT_KID), kid);
     }
 
     private static void savePem(Path path, String type, byte[] content) throws IOException {
@@ -62,20 +59,12 @@ public class KeyUtils {
     }
 
     public static String loadCurrentKid(String dir) throws IOException {
-        Path kidPath = Paths.get(dir, "current_kid.txt");
+        Path kidPath = Paths.get(dir, CURRENT_KID);
         return Files.readString(kidPath).trim();
-    }
-
-    public static PrivateKey loadCurrentPrivateKey(String dir) throws Exception {
-        return loadPrivateKey(Paths.get(dir, "current_private.pem"));
     }
 
     public static PrivateKey loadPrivateKeyByKid(String dir, String kid) throws Exception {
         return loadPrivateKey(Paths.get(dir, "jwt_private_" + kid + ".pem"));
-    }
-
-    public static PublicKey loadCurrentPublicKey(String dir) throws Exception {
-        return loadPublicKey(Paths.get(dir, "current_public.pem"));
     }
 
     public static PublicKey loadPublicKeyByKid(String dir, String kid) throws Exception {

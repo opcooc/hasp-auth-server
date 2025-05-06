@@ -2,7 +2,6 @@ package org.hasp.server.configuration;
 
 import org.hasp.server.event.AuthenticationEventListener;
 import org.hasp.server.utils.SecurityConstants;
-import org.hasp.server.utils.SecurityUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -64,8 +63,6 @@ public class DefaultSecurityConfiguration {
 
         http.oauth2ResourceServer(customizer -> {
             customizer.jwt(Customizer.withDefaults());
-            customizer.accessDeniedHandler(SecurityUtils::exceptionHandler);
-            customizer.authenticationEntryPoint(SecurityUtils::exceptionHandler);
         });
 
         return http.build();
